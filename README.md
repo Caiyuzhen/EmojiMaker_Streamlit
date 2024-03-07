@@ -7,3 +7,6 @@
 
 # 启动项目
 `streamlit run 🏠Homepage.py`
+
+# 部署
+`share.streamlit.io`
