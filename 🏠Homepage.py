@@ -1,10 +1,37 @@
+import random
 import streamlit as st
 from langchain_openai import ChatOpenAI
+import os
 from langchain.schema import (
 	AIMessage,
 	HumanMessage,
 	SystemMessage
 )
+
+
+
+
+
+# 返回 emoji 图片的方法
+def get_emoji_from_name(emoji_name):
+	emoji_dir = "assets/emoji" # emoji 图片的文件夹
+	for emoji_name in os.listdir(emoji_dir): # 遍历文件夹
+		if emoji_name.lower() in emoji_name.lower(): # 如果物体名称在文件名中, lower() 是为了忽略大小写
+			return os.path.join(emoji_dir, emoji_name)
+	return None # 如果没有找到, 就返回 None
+	# emoji_dict = {
+	# 	"猫": "🐱",
+	# 	"狗": "🐶",
+	# }
+    # return emoji_dict.get(object_name, "🤷‍♂️") # 如果没有找到, 就返回 🤷‍♂️
+
+
+# 返回随机背景色的方法
+def get_random_color():
+    r = lambda: random.randint(0,255)
+    return '#%02X%02X%02X' % (r(),r(),r()) # 返回随机颜色
+
+
 
 
 # 初始化 OpenAI
@@ -55,7 +82,7 @@ with st.container():
 # 💬 实例化聊天窗口
 if chat: # 如果 chat 存在 (前提是输入了 KEY), 就显示输入框
 	with st.container():
-		st.header("一个聊天窗口")
+		st.subheader("一个聊天窗口")
 		prompt = st.text_area("请输入你的问题 (prompt)", value="", height=300, max_chars=None, key=None) # 输入框
 		haveAsked = st.button("Ask")
 		if haveAsked: # 如果有输入问题, 就显示回答
@@ -65,5 +92,21 @@ if chat: # 如果 chat 存在 (前提是输入了 KEY), 就显示输入框
 if not chat: # 如果 chat 不存在(没有设置 KEY, 就显示提示 banner）
 	st.markdown('<style>div.block-container{margin-top: 20px;}</style>', unsafe_allow_html=True) # 🔥 使用 html 添加自定义间距
 	st.warning("请设置 OpenAI 的 API Key") # 显示提示信息
-    
 
+
+# 😄 将物体名称转化为 Emoji 图片
+with st.container():
+	st.subheader("Change Object Name to Emoji")
+	object_name = st.text_input("请输入物体名称(例如: 猫)", value="", max_chars=None, key="object_input", type='default')
+	find_emoji = st.button("Generate Emoji")
+
+	if object_name and find_emoji: # 如果有输入物体名称 且 点了按钮
+		# 调用函数, 传入物体名称, 返回 emoji
+		emoji_path = get_emoji_from_name(object_name) # 传入名词, 返回 emoji 图片路径
+		if emoji_path:
+			st.image(emoji_path, width=100) # 显示 emoji 图片
+		else:
+			st.warning("🤷‍♂️ 没有找到对应的 emoji 图片")
+   
+		# 调用函数, 返回随机背景色
+		background_colors = get_random_color()
