@@ -2,9 +2,9 @@ import streamlit as st
 
 
 
-# 设置输入框的兜底值
+# 设置 session 会话存储的兜底值
 if "OPENAI_API_KEY" not in st.session_state:
-	st.session_state["OPENAI_API_KEY"] = "" # 设置输入框的展示值
+	st.session_state["OPENAI_API_KEY"] = "xxxxxx" # 设置输入框的展示值
 
 
 # 设置页面标题和布局
@@ -13,7 +13,7 @@ st.title("OpenAI 设置") # 页面大标题
 
 
 # API 变量, 值从会话状态 session_state 中获取
-openAI_api_key = st.text_input("请输入 API Key", value=st.session_state["OPENAI_API_KEY"], max_chars=None, key=None, type='default')
+openAI_api_key = st.text_input("请输入 API Key", value=st.session_state["OPENAI_API_KEY"], max_chars=None, key=None, type='password')
 
 
 # 保存按钮
