@@ -4,12 +4,12 @@ import streamlit as st
 
 # 设置 session 会话存储的兜底值
 if "OPENAI_API_KEY" not in st.session_state:
-	st.session_state["OPENAI_API_KEY"] = "xxxxxx" # 设置输入框的展示值
+	st.session_state["OPENAI_API_KEY"] = "123" # 设置输入框的展示值
 
 
 # 设置页面标题和布局
 st.set_page_config(page_title="OpenAI 设置", layout="wide") # 🔥 set_page_config 必须是第一个命令!
-st.title("OpenAI 设置") # 页面大标题
+st.title("OpenAI 设置") # 页面大标题1
 
 
 # API 变量, 值从会话状态 session_state 中获取

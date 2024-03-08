@@ -1,6 +1,7 @@
 # 安装依赖
 `pip3 install streamlit`
 `pip3 install -q -U langchain openai tiktoken pinecone-client`
+`pip3 install Pillow`
 
 # 维护依赖
 `pip3 freeze > requirements.txt`

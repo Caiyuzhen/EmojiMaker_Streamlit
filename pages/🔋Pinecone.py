@@ -4,10 +4,10 @@ import streamlit as st
 
 # 设置 session 会话存储的兜底值
 if "PINECONE_API_KEY" not in st.session_state:
-	st.session_state["PINECONE_API_KEY"] = "xxxxxx" # 设置输入框的展示值
+	st.session_state["PINECONE_API_KEY"] = "123" # 设置输入框的展示值
  
 if "PINECONE_API_ENDPOINT" not in st.session_state:
-	st.session_state["PINECONE_API_ENDPOINT"] = "xxxxxx" # 设置输入框的展示值
+	st.session_state["PINECONE_API_ENDPOINT"] = "123" # 设置输入框的展示值
 
  
 # 设置页面标题和布局
