@@ -7,7 +7,7 @@
 `pip3 freeze > requirements.txt`
 
 # 启动项目
-`streamlit run 🏠Homepage.py`
+`streamlit run main.py`
 
 # 部署
 `share.streamlit.io`
