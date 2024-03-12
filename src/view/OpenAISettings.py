@@ -16,8 +16,8 @@ class OpenAISettingsPage:
 
 		# API 变量, 值从会话状态 session_state 中获取
 		OPENAI_API_KEY = st.text_input("请输入 API Key", value=st.session_state["OPENAI_API_KEY"], max_chars=None, key=None, type='password')
-		OPENAI_URL = st.text_input("请输入 OpenAI URL", value="", max_chars=None, key=None, type='default')
-		OPENAI_MODEL_NAME = st.text_input("请输入 OpenAI Model Name", value="", max_chars=None, key=None, type='default')
+		OPENAI_URL = st.text_input("请输入 AI SERVER URL", value=st.session_state["AI_SERVER_URL"], max_chars=None, key=None, type='default')
+		OPENAI_MODEL_NAME = st.text_input("请输入 OpenAI Model Name", value=st.session_state["MODEL_NAME"], max_chars=None, key=None, type='default')
 
 		# 保存按钮
 		saved = st.button("Save", key="save_button_tab1")
