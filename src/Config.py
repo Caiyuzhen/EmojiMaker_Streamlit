@@ -1,6 +1,6 @@
 import os
-import streamlit as st
 from dotenv import load_dotenv
+import streamlit as st
 
 
 # 统一管理配置的参数
@@ -44,11 +44,29 @@ class Config:
 			for key, val in env_dict.items():
 				file.write(f"{key}={val}\n")
 		# print("👍 保存配置到 .env 文件")
-   
-   
-   	# 读取 .env 配置文件
+	
+ 
+	# 读取 .env 配置文件并拿到配置值
 	@staticmethod # 无需创建类的实例即可调用
-	def load_env():
+	def get_env(attr):
+		# 尝试打开并读取 .env 文件
+		try:
+			with open(".env", "r") as file:
+				for line in file:
+					# 分割每一行为键和值
+					if "=" in line:
+						key, val = line.strip().split("=", 1)
+						# 检查是否是我们需要的键
+						if key == attr:
+							return val
+		except FileNotFoundError:
+			print("⚠️ .env 文件不存在。")
+		return None  # 如果没有找到键，返回 None
+
+
+   	# 读取 .env 配置文件并修改会话状态
+	@staticmethod # 无需创建类的实例即可调用
+	def init_env():
 		# 读取环境变量
 		load_dotenv()
 		OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
@@ -57,12 +75,12 @@ class Config:
 		# print("🔑🔑🔑🔑🔑 拿到了 KEY: ", OPENAI_API_KEY)
   
   		# 设置会话存储
-		if "OPENAI_API_KEY" not in st.session_state:
-			st.session_state["OPENAI_API_KEY"] = OPENAI_API_KEY # 兜底
-			# chat = ChatOpenAI(openai_api_key=openAI_api_key) # 有 OpenAI KEY 的话就使用 KEY 来初始化 chat 实例
-		if "AI_SERVER_URL" not in st.session_state:
-			st.session_state["AI_SERVER_URL"] = AI_SERVER_URL # 兜底
-		if "AI_MODEL_NAME" not in st.session_state:
-			st.session_state["AI_MODEL_NAME"] = AI_MODEL_NAME # 兜底
+		if "OPENAI_API_KEY" not in st.session_state or st.session_state["OPENAI_API_KEY"] is None:
+			st.session_state["OPENAI_API_KEY"] = OPENAI_API_KEY
+		if "AI_SERVER_URL" not in st.session_state or st.session_state["AI_SERVER_URL"] is None:
+			st.session_state["AI_SERVER_URL"] = AI_SERVER_URL
+		if "AI_MODEL_NAME" not in st.session_state or st.session_state["AI_MODEL_NAME"] is None:
+			st.session_state["AI_MODEL_NAME"] = AI_MODEL_NAME
+
    
 

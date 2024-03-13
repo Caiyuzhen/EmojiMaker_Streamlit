@@ -45,8 +45,7 @@ def render():
 	"""
 	st.markdown(custom_css, unsafe_allow_html=True) # 🔥 使用 html 添加自定义样式 (CSS 注入)
 	with tab1:
-		homePage = Homepage()
-		homePage.render()
+		Homepage.render()
 	with tab2:
 		OpenAISettingsPage.render() # 静态方法, 不传入 self, 直接调用
     
