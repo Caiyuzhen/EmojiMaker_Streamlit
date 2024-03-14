@@ -2,9 +2,14 @@ import streamlit as st
 from src.Config import Config
 import requests
 # from openai import OpenAI
+from langchain.llms import
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain.chains import LLMChain
+from langchain.memory import ConversationBufferMemory
+# from llamaapi import LlamaAPI
 
 
 INFO = "ℹ️ Open AI key 有问题，请检查"
@@ -19,38 +24,55 @@ def request_llm_custom_msg(
 	max_tokens,
 ):
 	# 使用 OpenAI 客户端加载模型
-	llm = ChatOpenAI(
-		base_url=server_url, 
-		api_key=api_key,
-		temperature=temperature,
+	chat = ChatOpenAI(
+		base_url="http://127.0.0.1:1234/v1", 
+		api_key="EMPTY",
+		temperature=0.7,
 	)
+	# res = chat.invoke("你好, 请告诉我如何做一个完美的荷包蛋")
+	# print(res)
+ 
 
-	# 构造提示词模板
-	template = """
-		你是一个聊天机器人，你的任务是回答用户的问题。
-
-		用户的问题是：
-		“{{question}}”。
-			
-		请回答用户的问题, 并在每次回答后都说 “啦啦啦我回答完啦！”
-	"""
 
 	# 生成提示词	
-	prompt = PromptTemplate(template)
+	# prompt = ChatPromptTemplate.from_template(template=template)
+	chat_template_prompt = ChatPromptTemplate.from_messages(
+		[
+			("system", "你是一个厨师, 你的任务是回答用户的问题, 请用中文回答。"),
+			("human", "Hello, how are you doing?"),
+			("ai", "I'm doing well, thanks!"),
+			("human", "{user_input}"), # 👈 构建动态的用户输入内容
+		]
+	)
  
-	# 构造输出解析器和【链】
+	# 输出解析器和【链】
 	output_parser = StrOutputParser()
  
-	# 调用链, 获取回答
-	chain = prompt | llm | output_parser
+	# 构建 LCEL 链
+	chain = (
+		chat_template_prompt |
+		chat |
+		output_parser
+	)
+
+	# 动态地定义用户的问题
+	user_input = "你好, 请教我怎么做炒鸡蛋这道菜, 用中文回答我"
 
 
-	response = chain.invoke({"question": inputMsg})
-	st.info(response)
+
+	# 调用链并传递 user_input (🌟 一般输出) ———————————————————————————————————————————-——————————————————————
+	# response = chain.invoke({"user_input": user_input})
+	# print(response)
  
-	# 返回模型的回答
-	return response, "OK 👍"
-
+ 
+    # 使用流式调用 (🌟 流式输出) ———————————————————————————————————————————-——————————————————————
+	for chunk in chain.stream({"user_input": user_input}):
+		print(chunk, end="")
+  
+  
+  
+  
+	# 👇 OpenAI Python SDK 的调用方式
 	# try:
 	# 	completion = llm.chat.completions.create(
 	# 		api_key=api_key,
